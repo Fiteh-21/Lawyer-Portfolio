@@ -3,6 +3,8 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import { db } from "./database/config.js";
+import { errorHandler } from "./src/middleware/error-handler.js";
+import { mainRouter } from "./src/api/routes.js";
 
 const app = express();
 app.use(cors());
@@ -25,6 +27,9 @@ validateEnv();
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date() });
 });
+
+app.use(errorHandler);
+app.use("/api", mainRouter);
 
 // Start server
 const startServer = async () => {
